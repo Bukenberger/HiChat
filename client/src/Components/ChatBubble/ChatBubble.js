@@ -1,6 +1,11 @@
 import React, { useEffect, useRef } from "react";
 import { ListItem } from "@material-ui/core";
-import ChatMsg from "./ChatMsg";
+
+// Components
+import ChatMessage from "../ChatMessage/ChatMessage";
+
+// CSS
+import "./ChatBubble.css";
 
 const ChatBubble = (props) => {
   const chatRef = useRef(null);
@@ -9,11 +14,8 @@ const ChatBubble = (props) => {
   }, []);
   return (
     <div>
-      <ListItem
-        ref={chatRef}
-        style={{ textAlign: "left", marginBottom: "5px" }}
-      >
-        <ChatMsg msg={props.msg} client={props.client} />
+      <ListItem ref={chatRef} className="item">
+        <ChatMessage msg={props.msg} client={props.client} />
       </ListItem>
       <p></p>
     </div>

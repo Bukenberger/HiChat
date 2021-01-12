@@ -1,0 +1,8 @@
+.chatList {
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  box-sizing: border-box;
+  height: calc(55vh);
+  overflow-y: hidden;
+  overflow-x: hidden;
+}

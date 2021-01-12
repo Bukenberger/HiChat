@@ -1,6 +1,11 @@
 import React from "react";
 import { List } from "@material-ui/core";
-import ChatBubble from "./ChatBubble";
+
+// Components
+import ChatBubble from "../ChatBubble/ChatBubble";
+
+// CSS
+import "./ChatBubbleList.css";
 
 const ChatBubbleList = (props) => {
   let messages = props.msg.map((msg, idx) => {
@@ -10,4 +15,5 @@ const ChatBubbleList = (props) => {
     <List style={{ maxHeight: "100%", overflow: "auto" }}>{messages}</List>
   );
 };
+
 export default ChatBubbleList;

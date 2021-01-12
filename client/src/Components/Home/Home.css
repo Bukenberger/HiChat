@@ -1,0 +1,21 @@
+.logo-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: 100%;
+  max-height: 20vh;
+  margin: 20px;
+}
+
+.join-card {
+  margin: 15px;
+}
+
+.sign-in {
+  text-align: center;
+}
+
+.enter-btn {
+  margin-left: 3%;
+}

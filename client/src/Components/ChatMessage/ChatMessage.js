@@ -1,9 +1,10 @@
 import React from "react";
-import "../App/App.css";
-
 import { Card, CardContent } from "@material-ui/core";
 
-const ChatMsg = (props) => {
+// CSS
+import "../App/App.css";
+
+const ChatMessage = (props) => {
   return (
     <Card
       style={{
@@ -43,4 +44,4 @@ const ChatMsg = (props) => {
   );
 };
 
-export default ChatMsg;
+export default ChatMessage;

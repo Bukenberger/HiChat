@@ -1,33 +1,20 @@
-import React, { useReducer, useEffect, Fragment } from "react";
+import React, { useReducer, useEffect } from "react";
 import io from "socket.io-client";
 import { MuiThemeProvider } from "@material-ui/core/styles";
-import {
-  Button,
-  TextField,
-  Typography,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  Card,
-  CardContent,
-  FormControl,
-  FormControlLabel,
-  RadioGroup,
-  Radio,
-  Table,
-  TableBody,
-  TableRow,
-  TableCell,
-} from "@material-ui/core";
+
+// Components
+import Home from "../Home/Home";
 import Modal from "../Modal/Modal";
-import theme from "../../theme";
-import ChatBubbleList from "../Chat/ChatBubbleList";
+import ChatInputBox from "../ChatInputBox/ChatInputBox";
 import TopBar from "../TopBar/TopBar";
-import logo from "../../images/chat-icon2.png";
-import userIcon from "../../images/user.png";
+
+// Styling theme
+import theme from "../../theme";
+
+// CSS
 import "./App.css";
 
-const Project2Component = () => {
+const App = () => {
   const initialState = {
     messages: [],
     rooms: [],
@@ -51,6 +38,7 @@ const Project2Component = () => {
     setState({ showjoinfields: false, alreadyexists: false });
   };
 
+  // User name validation
   const onNameExists = (dataFromServer) => {
     setState({ nameStatus: dataFromServer.text });
   };
@@ -66,7 +54,7 @@ const Project2Component = () => {
 
   const onNewMessage = (dataFromServer) => {
     addMessage(dataFromServer);
-    setState({ typingMsg: "" });
+    setState({ typingMsg: "", isTyping: false });
   };
 
   const onDisplayRooms = (dataFromServer) => {
@@ -81,21 +69,6 @@ const Project2Component = () => {
     serverConnect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const serverConnect = () => {
-    // connect to server
-    const socket = io.connect("localhost:5000", { forceNew: true });
-    // const socket = io();
-    socket.on("displayrooms", onDisplayRooms);
-    socket.on("nameexists", onNameExists);
-    socket.on("welcome", onWelcome);
-    socket.on("someonejoined", addMessage);
-    socket.on("someoneleft", addMessage);
-    socket.on("someoneistyping", onTyping);
-    socket.on("newmessage", onNewMessage);
-    socket.on("displayonline", onDisplayOnlineUsers);
-    setState({ socket: socket });
-  };
 
   // generic handler for all messages:
   const addMessage = (dataFromServer) => {
@@ -113,11 +86,11 @@ const Project2Component = () => {
   };
 
   // handler for name TextField entry
-  const onNameChange = (e) => {
+  const handleNameChange = (e) => {
     setState({ chatName: e.target.value });
   };
 
-  const onRoomChange = (e) => {
+  const handleRoomChange = (e) => {
     setState({ roomName: e.target.value });
   };
 
@@ -125,7 +98,6 @@ const Project2Component = () => {
     state.socket.emit("refreshuserlist");
     setState({ isOpen: true });
   };
-  const handleCloseDialog = () => setState({ isOpen: false });
 
   // keypress handler for message TextField
   const onMessageChange = (e) => {
@@ -152,104 +124,45 @@ const Project2Component = () => {
     setState({ roomName: e.target.value });
   };
 
+  const serverConnect = () => {
+    // connect to server
+    const socket = io.connect("localhost:5000", { forceNew: true });
+    // const socket = io();
+    socket.on("displayrooms", onDisplayRooms);
+    socket.on("nameexists", onNameExists);
+    socket.on("welcome", onWelcome);
+    socket.on("someonejoined", addMessage);
+    socket.on("someoneleft", addMessage);
+    socket.on("someoneistyping", onTyping);
+    socket.on("newmessage", onNewMessage);
+    socket.on("displayonline", onDisplayOnlineUsers);
+    setState({ socket: socket });
+  };
+
   return (
     <MuiThemeProvider theme={theme}>
       <div>
         <TopBar viewDialog={handleOpenDialog} display={state.showjoinfields} />
-        <Modal props={state} closeFunc={handleCloseDialog} />
+        <Modal props={state} closeFunc={() => setState({ isOpen: false })} />
       </div>
       {state.showjoinfields && (
-        <Fragment>
-          <div className="logo-div">
-            <img src={logo} alt="chat logo" />
-          </div>
-          <Typography color="primary" style={{ textAlign: "center" }}>
-            Sign In
-          </Typography>
-          <Card className="join-card">
-            <CardContent>
-              <TextField
-                onChange={onNameChange}
-                placeholder="Chat Name"
-                required
-                value={state.chatName}
-                error={state.nameStatus !== ""}
-                helperText={state.nameStatus}
-              />
-            </CardContent>
-          </Card>
-          <Card className="join-card">
-            <CardContent>
-              <Typography color="primary">
-                Join Existing or Enter Room Name
-              </Typography>
-              <FormControl>
-                <RadioGroup
-                  aria-label="room"
-                  name="rooms"
-                  value={state.roomName}
-                  onChange={handleRadioButtons}
-                  defaultChecked={0}
-                >
-                  {state.rooms.map((room, idx) => {
-                    return (
-                      <FormControlLabel
-                        key={idx}
-                        value={room}
-                        control={<Radio />}
-                        label={room}
-                      />
-                    );
-                  })}
-                </RadioGroup>
-              </FormControl>
-              <br />
-              <TextField
-                onChange={onRoomChange}
-                placeholder="Room Name"
-                required
-                value={state.roomName}
-                helperText={"enter a new room name"}
-              />
-            </CardContent>
-          </Card>
-          <Button
-            variant="contained"
-            color="primary"
-            style={{ marginLeft: "3%" }}
-            onClick={() => handleJoin()}
-            disabled={state.chatName === "" || state.roomName === ""}
-          >
-            Join
-          </Button>
-        </Fragment>
+        <Home
+          props={state}
+          handleRadioButtons={handleRadioButtons}
+          handleNameChange={handleNameChange}
+          handleRoomChange={handleRoomChange}
+          handleJoin={handleJoin}
+        />
       )}
       {!state.showjoinfields && (
-        <Card>
-          <CardContent>
-            <div className="chatList">
-              <ChatBubbleList
-                msg={state.messages}
-                client={state.chatName}
-              ></ChatBubbleList>
-            </div>
-            <br />
-            <TextField
-              style={{ width: "100%" }}
-              onChange={onMessageChange}
-              placeholder="Enter a message..."
-              autoFocus={true}
-              value={state.message}
-              onKeyPress={(e) =>
-                e.key === "Enter" ? handleSendMessage() : null
-              }
-            />
-            <Typography color="primary">{state.typingMsg}</Typography>
-          </CardContent>
-        </Card>
+        <ChatInputBox
+          props={state}
+          onMessageChange={onMessageChange}
+          handleSendMessage={handleSendMessage}
+        />
       )}
     </MuiThemeProvider>
   );
 };
 
-export default Project2Component;
+export default App;
