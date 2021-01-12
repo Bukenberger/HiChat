@@ -3,8 +3,6 @@
 ![React](https://img.shields.io/badge/react%20-%2320232a.svg?&style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![NodeJS](https://img.shields.io/badge/node.js%20-%2343853D.svg?&style=for-the-badge&logo=node.js&logoColor=white)&nbsp;
 
-## Description
-
 HiChat is a real-time chatting application built with a Reactjs frontend, and Nodejs backend. Sessions are maintained using socket.io.
 
 | Signing In | Entering the chat | Chatting | Checking out the room
