@@ -2,13 +2,13 @@ import React from "react";
 import Accessibility from "@material-ui/icons/Accessibility";
 import { AppBar, IconButton, Toolbar, Typography } from "@material-ui/core";
 
-const TopBar = props => {
+const TopBar = (props) => {
   const onIconClicked = () => props.viewDialog(); // notify the parent
   return (
     <AppBar position="static" style={{ borderRadius: 10 }}>
       <Toolbar color="primary" title="Chat it Up!">
         <Typography variant="h6" color="inherit">
-          Chat it Up! - INFO3139
+          HiChat
         </Typography>
         <section style={{ height: 90, width: 90, marginLeft: "auto" }}>
           {!props.display && (

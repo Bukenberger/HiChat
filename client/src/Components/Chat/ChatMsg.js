@@ -13,7 +13,7 @@ const ChatMsg = (props) => {
         width: "70%",
         marginBottom: "-1em",
         borderRadius: "10px",
-        left: props.client === props.msg.from ? "34%" : "-5%",
+        left: props.client === props.msg.from ? "30%" : "-1%",
         color: "white",
       }}
     >

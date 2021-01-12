@@ -19,11 +19,12 @@ import {
   TableRow,
   TableCell,
 } from "@material-ui/core";
+import Modal from "../Modal/Modal";
 import theme from "../../theme";
 import ChatBubbleList from "../Chat/ChatBubbleList";
 import TopBar from "../TopBar/TopBar";
 import logo from "../../images/chat-icon2.png";
-import userPicture from "../../images/user.png";
+import userIcon from "../../images/user.png";
 import "./App.css";
 
 const Project2Component = () => {
@@ -65,7 +66,7 @@ const Project2Component = () => {
 
   const onNewMessage = (dataFromServer) => {
     addMessage(dataFromServer);
-    setState({ typingMsg: "", message: "" });
+    setState({ typingMsg: "" });
   };
 
   const onDisplayRooms = (dataFromServer) => {
@@ -143,7 +144,7 @@ const Project2Component = () => {
         { from: state.chatName, text: state.message },
         (err) => {}
       );
-      setState({ isTyping: false });
+      setState({ message: "" });
     }
   };
 
@@ -155,39 +156,7 @@ const Project2Component = () => {
     <MuiThemeProvider theme={theme}>
       <div>
         <TopBar viewDialog={handleOpenDialog} display={state.showjoinfields} />
-        <Dialog
-          open={state.isOpen}
-          onClose={handleCloseDialog}
-          style={{ margin: 20 }}
-        >
-          <DialogTitle style={{ textAlign: "center" }}>Who's On?</DialogTitle>
-          <DialogContent>
-            <Table>
-              <TableBody>
-                {state.onlineUsers.map((user, idx) => {
-                  return (
-                    <TableRow key={idx}>
-                      <TableCell>
-                        <img
-                          src={userPicture}
-                          alt="user"
-                          style={{
-                            backgroundColor: user.colour,
-                            borderRadius: 25,
-                            marginRight: "15px",
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        {user.name} is in {state.roomName}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </DialogContent>
-        </Dialog>
+        <Modal props={state} closeFunc={handleCloseDialog} />
       </div>
       {state.showjoinfields && (
         <Fragment>
